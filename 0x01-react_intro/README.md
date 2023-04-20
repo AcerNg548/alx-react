@@ -1,4 +1,4 @@
-# 0x02. React intro
+# 0x01. React intro
 :open_file_folder: Specializations - Web Stack programming ― React   
 :bookmark: babel | enzyme | javascript | react | webpack
 
