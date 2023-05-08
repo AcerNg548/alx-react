@@ -26,12 +26,21 @@ BodySection.propTypes = {
   title: PropTypes.string,
 };
 
+const screenSize = {
+  small: '@media screen and (max-width: 900px)',
+};
+
 const styles = StyleSheet.create({
   bodySection: {
     width: '100%',
     marginTop: '160px',
     display: 'flex',
     flexWrap: 'wrap',
+    padding: '32px',
+    [screenSize.small]: {
+      margin: '240px 0 -240px',
+      padding: '16px',
+    },
   },
   heading: {
     width: '100%',

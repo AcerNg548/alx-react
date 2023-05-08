@@ -1,30 +1,43 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import close_icon from '../assets/close-icon.png';
 import NotificationItem from './NotificationItem';
 import PropTypes from 'prop-types';
 import NotificationItemShape from './NotificationItemShape';
 import { StyleSheet, css } from 'aphrodite';
 
-class Notifications extends Component {
+class Notifications extends PureComponent {
   constructor(props) {
     super(props);
-    this.markAsRead = this.markAsRead.bind(this);
+    //this.markAsRead = this.markAsRead.bind(this);
   }
+  /*
   markAsRead(id) {
     console.log(`Notification ${id} has been marked as read`);
   }
   shouldComponentUpdate(nextProps) {
     return (
-      nextProps.listNotifications.length > this.props.listNotifications.length
+      nextProps.listNotifications.length >
+        this.props.listNotifications.length ||
+      nextProps.displayDrawer !== this.props.displayDrawer
     );
   }
-
+*/
   render() {
-    const { displayDrawer, listNotifications } = this.props;
+    const {
+      displayDrawer,
+      listNotifications,
+      handleDisplayDrawer,
+      handleHideDrawer,
+      markNotificationAsRead,
+    } = this.props;
     const show = css(displayDrawer ? styles.showOff : styles.showOn);
     return (
       <Fragment>
-        <div className={css(styles.menuItem)}>
+        <div
+          className={css(styles.menuItem)}
+          onClick={handleDisplayDrawer}
+          id='menuItem'
+        >
           <p className={show}>Your notifications</p>
         </div>
         {displayDrawer && (
@@ -40,14 +53,15 @@ class Notifications extends Component {
                   type={notification.type}
                   value={notification.value}
                   html={notification.html}
-                  markAsRead={this.markAsRead}
+                  markAsRead={markNotificationAsRead}
                 />
               ))}
             </ul>
             <button
               type='button'
               aria-label='Close'
-              onClick={() => console.log('Close button has been clicked')}
+              onClick={handleHideDrawer}
+              id='close'
               style={{
                 display: 'inline-block',
                 position: 'absolute',
@@ -76,11 +90,17 @@ class Notifications extends Component {
 Notifications.defaultProps = {
   displayDrawer: false,
   listNotifications: [],
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
+  markNotificationAsRead: () => {},
 };
 
 Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
   listNotifications: PropTypes.arrayOf(NotificationItemShape),
+  handleDisplayDrawer: PropTypes.func,
+  handleHideDrawer: PropTypes.func,
+  markNotificationAsRead: PropTypes.func,
 };
 
 const screenSize = {

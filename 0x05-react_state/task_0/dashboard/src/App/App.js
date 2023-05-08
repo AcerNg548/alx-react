@@ -8,11 +8,15 @@ import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import PropTypes from 'prop-types';
 import { getLatestNotification } from '../utils/utils';
+import { StyleSheet, css } from 'aphrodite';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer = this.handleHideDrawer.bind(this);
+    this.state = { displayDrawer: false };
   }
   componentDidMount() {
     window.addEventListener('keydown', this.handleLogout);
@@ -27,6 +31,13 @@ class App extends Component {
       this.props.logOut();
     }
   }
+  handleDisplayDrawer() {
+    this.setState({ displayDrawer: true });
+  }
+
+  handleHideDrawer() {
+    this.setState({ displayDrawer: false });
+  }
   render() {
     const listCourses = [
       { id: 1, name: 'ES6', credit: 60 },
@@ -39,9 +50,15 @@ class App extends Component {
       { id: 3, type: 'urgent', html: { __html: getLatestNotification() } },
     ];
     const { isLoggedIn } = this.props;
+    const { displayDrawer } = this.state;
     return (
       <Fragment>
-        <Notifications listNotifications={listNotifications} />
+        <Notifications
+          listNotifications={listNotifications}
+          displayDrawer={displayDrawer}
+          handleDisplayDrawer={this.handleDisplayDrawer}
+          handleHideDrawer={this.handleHideDrawer}
+        />
         <Header />
         {isLoggedIn ? (
           <BodySectionWithMarginBottom title='Course list'>
@@ -53,9 +70,16 @@ class App extends Component {
           </BodySectionWithMarginBottom>
         )}
         <BodySection title='News from the School'>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+          <p className={css(styles.p)}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto,
+            ullam? Quisquam eos temporibus, voluptate error, sunt consectetur
+            ducimus eaque dolorum sit excepturi doloribus officiis reprehenderit
+            distinctio dignissimos adipisci a aspernatur.
+          </p>
         </BodySection>
-        <Footer />
+        <div className={css(styles.footer)}>
+          <Footer />
+        </div>
       </Fragment>
     );
   }
@@ -70,5 +94,19 @@ App.propTypes = {
   isLoggedIn: PropTypes.bool,
   logOut: PropTypes.func,
 };
+
+const styles = StyleSheet.create({
+  footer: {
+    width: '100%',
+    position: 'fixed',
+    bottom: 0,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    borderTop: 'thick solid #e0344a',
+  },
+  p: {
+    marginTop: 0,
+  },
+});
 
 export default App;
